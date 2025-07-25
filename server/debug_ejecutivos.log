@@ -13309,3 +13309,252 @@
     [id_pla] => 13
 )
 
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:06:51] Query planteles: SELECT id_pla, nom_pla, fec_pla FROM plantel ORDER BY nom_pla ASC
+[2025-07-25 20:06:51] Planteles encontrados: 7
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 16
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 9
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 6
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 3
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 2
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 13
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos_con_citas
+)
+
+[2025-07-25 20:06:51] Query ejecutivos con citas: SELECT e.id_eje, e.nom_eje, e.tel_eje, e.fot_eje, e.eli_eje, e.id_padre, e.id_pla, e.ult_eje,
+					         p.nom_pla as plantel_principal,
+					         COUNT(DISTINCT c.id_cit) as citas_propias,
+					         GROUP_CONCAT(DISTINCT CONCAT(pa.id_pla, ':', pa.nom_pla) SEPARATOR '|') as planteles_asociados,
+					         COUNT(DISTINCT pe.id_pla) as total_planteles_asociados,
+					         CASE 
+					             WHEN e.ult_eje IS NULL THEN 'sin_sesion'
+					             WHEN TIMESTAMPDIFF(DAY, e.ult_eje, NOW()) <= 1 THEN 'verde'
+					             WHEN TIMESTAMPDIFF(DAY, e.ult_eje, NOW()) BETWEEN 2 AND 3 THEN 'amarillo'
+					             WHEN TIMESTAMPDIFF(DAY, e.ult_eje, NOW()) >= 4 THEN 'rojo'
+					             ELSE 'sin_sesion'
+					         END as semaforo_sesion,
+					         TIMESTAMPDIFF(DAY, e.ult_eje, NOW()) as dias_desde_ultima_sesion
+					  FROM ejecutivo e 
+					  LEFT JOIN plantel p ON e.id_pla = p.id_pla 
+					  LEFT JOIN cita c ON e.id_eje = c.id_eje2 AND c.eli_cit = 1 
+					  LEFT JOIN planteles_ejecutivo pe ON e.id_eje = pe.id_eje
+					  LEFT JOIN plantel pa ON pe.id_pla = pa.id_pla
+					  GROUP BY e.id_eje, e.nom_eje, e.tel_eje, e.fot_eje, e.eli_eje, e.id_padre, e.id_pla, e.ult_eje, p.nom_pla
+					  ORDER BY e.eli_eje DESC, e.nom_eje ASC
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 8
+)
+
+[2025-07-25 20:06:51] Ejecutivo ID: 9 - Citas propias: 3 - Citas hijos: 0 - Total: 3
+[2025-07-25 20:06:51] Ejecutivo ID: 122 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 119 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 72 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 90 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 135 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 104 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 1 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 16 - Citas propias: 6 - Citas hijos: 0 - Total: 6
+[2025-07-25 20:06:51] Ejecutivo ID: 94 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 59 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 60 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 61 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 75 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 76 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 74 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 54 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 55 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 87 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 89 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 138 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 11 - Citas propias: 7 - Citas hijos: 0 - Total: 7
+[2025-07-25 20:06:51] Ejecutivo ID: 107 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 108 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 86 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 80 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 64 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 48 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 126 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 112 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 96 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 128 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 84 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 126 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 105 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 100 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 137 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 73 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 132 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 118 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 116 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 121 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 68 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 102 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 52 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 12 - Citas propias: 5 - Citas hijos: 0 - Total: 5
+[2025-07-25 20:06:51] Ejecutivo ID: 79 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 63 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 47 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 111 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 95 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 127 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 62 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 91 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 92 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 110 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 77 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 57 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 58 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 139 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 123 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 124 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 18 - Citas propias: 5 - Citas hijos: 0 - Total: 5
+[2025-07-25 20:06:51] Ejecutivo ID: 15 - Citas propias: 5 - Citas hijos: 5 - Total: 10
+[2025-07-25 20:06:51] Ejecutivo ID: 18 - Citas propias: 5 - Citas hijos: 0 - Total: 5
+[2025-07-25 20:06:51] Ejecutivo ID: 70 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 71 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 136 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 120 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 103 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 109 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 56 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 6 - Citas propias: 2 - Citas hijos: 0 - Total: 2
+[2025-07-25 20:06:51] Ejecutivo ID: 6 - Citas propias: 2 - Citas hijos: 0 - Total: 2
+[2025-07-25 20:06:51] Ejecutivo ID: 4 - Citas propias: 4 - Citas hijos: 2 - Total: 6
+[2025-07-25 20:06:51] Ejecutivo ID: 131 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 115 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 67 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 51 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 83 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 99 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 106 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 81 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 65 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 49 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 113 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 97 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 129 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 1 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 10 - Citas propias: 3 - Citas hijos: 0 - Total: 3
+[2025-07-25 20:06:51] Ejecutivo ID: 13 - Citas propias: 4 - Citas hijos: 0 - Total: 4
+[2025-07-25 20:06:51] Ejecutivo ID: 2 - Citas propias: 6 - Citas hijos: 4 - Total: 10
+[2025-07-25 20:06:51] Ejecutivo ID: 14 - Citas propias: 4 - Citas hijos: 0 - Total: 4
+[2025-07-25 20:06:51] Ejecutivo ID: 134 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 93 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 78 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 125 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 21 - Citas propias: 5 - Citas hijos: 0 - Total: 5
+[2025-07-25 20:06:51] Ejecutivo ID: 20 - Citas propias: 5 - Citas hijos: 0 - Total: 5
+[2025-07-25 20:06:51] Ejecutivo ID: 13 - Citas propias: 4 - Citas hijos: 0 - Total: 4
+[2025-07-25 20:06:51] Ejecutivo ID: 66 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 50 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 130 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 114 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 82 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 98 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 53 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 85 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 133 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 69 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 117 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 101 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 88 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 157 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 154 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 141 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 144 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 150 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 153 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 148 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 143 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 155 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 156 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 140 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 142 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 151 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 158 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 147 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 152 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 145 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 146 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivo ID: 149 - Citas propias: 0 - Citas hijos: 0 - Total: 0
+[2025-07-25 20:06:51] Ejecutivos con citas encontrados: 127
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 16
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 9
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 6
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 2
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 3
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 8
+)
+
+[2025-07-25 20:06:51] REQUEST recibido: Array
+(
+    [action] => obtener_citas_totales_por_plantel
+    [id_pla] => 13
+)
+

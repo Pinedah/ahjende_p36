@@ -9226,3 +9226,802 @@
     [action] => obtener_planteles
 )
 
+[2025-07-25 19:13:37] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 19:13:37] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 19:13:37] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 19:13:38] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 19:13:38] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 19:13:38] - fecha_inicio: 2025-07-18
+[2025-07-25 19:13:38] - fecha_fin: 2025-07-25
+[2025-07-25 19:13:38] - id_ejecutivo: null
+[2025-07-25 19:13:38] - id_plantel: null
+[2025-07-25 19:13:38] - tipo_ejecutivo: null
+[2025-07-25 19:13:38] - incluir_planteles_asociados RAW: not set
+[2025-07-25 19:13:38] - incluir_planteles_asociados FINAL: false
+[2025-07-25 19:13:38] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 19:13:38] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 19:13:38] - Citas encontradas: 3
+[2025-07-25 19:13:38] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 19:13:38] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 19:13:38] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 19:13:38] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 19:13:39] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 19:13:39] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:04:54] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:04:54] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:04:54] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:04:54] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:04:54] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:04:54] - fecha_inicio: 2025-07-18
+[2025-07-25 20:04:54] - fecha_fin: 2025-07-25
+[2025-07-25 20:04:54] - id_ejecutivo: null
+[2025-07-25 20:04:54] - id_plantel: null
+[2025-07-25 20:04:54] - tipo_ejecutivo: null
+[2025-07-25 20:04:54] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:04:54] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:04:54] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:04:54] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:04:54] - Citas encontradas: 3
+[2025-07-25 20:04:55] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:04:55] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:04:55] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:04:55] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:04:55] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:04:55] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:05:16] REQUEST recibido: Array
+(
+    [action] => guardar_color
+    [id_cit] => 220
+    [fila] => 12
+    [columna] => 4
+    [color_fondo] => #ffeb3b
+    [color_texto] => #000000
+    [id_ejecutivo] => 1
+)
+
+[2025-07-25 20:05:19] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:05:19] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:05:19] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:05:19] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:05:19] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:05:19] - fecha_inicio: 2025-07-18
+[2025-07-25 20:05:19] - fecha_fin: 2025-07-25
+[2025-07-25 20:05:19] - id_ejecutivo: null
+[2025-07-25 20:05:19] - id_plantel: null
+[2025-07-25 20:05:19] - tipo_ejecutivo: null
+[2025-07-25 20:05:19] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:05:19] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:05:19] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:05:19] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:05:19] - Citas encontradas: 3
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:05:20] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:05:20] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:05:20] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:06:52] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:06:52] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:06:52] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:06:53] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:06:53] - fecha_inicio: 2025-07-18
+[2025-07-25 20:06:53] - fecha_fin: 2025-07-25
+[2025-07-25 20:06:53] - id_ejecutivo: null
+[2025-07-25 20:06:53] - id_plantel: null
+[2025-07-25 20:06:53] - tipo_ejecutivo: null
+[2025-07-25 20:06:53] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:06:53] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:06:53] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:06:53] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:06:53] - Citas encontradas: 3
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:06:53] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:06:53] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:16:43] REQUEST recibido: Array
+(
+    [action] => actualizar_cita
+    [id_cit] => 220
+    [campo] => pla_cit
+    [valor] => 16
+)
+
+[2025-07-25 20:16:43] REQUEST recibido: Array
+(
+    [action] => actualizar_cita
+    [campo] => pla_cit
+    [valor] => 16
+    [id_cit] => 220
+)
+
+[2025-07-25 20:19:24] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:19:24] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:19:24] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:19:25] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:19:25] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:19:25] - fecha_inicio: 2025-07-18
+[2025-07-25 20:19:25] - fecha_fin: 2025-07-25
+[2025-07-25 20:19:25] - id_ejecutivo: null
+[2025-07-25 20:19:25] - id_plantel: null
+[2025-07-25 20:19:25] - tipo_ejecutivo: null
+[2025-07-25 20:19:25] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:19:25] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:19:25] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:19:25] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:19:25] - Citas encontradas: 3
+[2025-07-25 20:19:26] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:19:26] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:19:26] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:19:26] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:19:26] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:19:26] EMBUDO ESTADÍSTICAS - Total: 84, Efectivas: 48, Registros: 25
+[2025-07-25 20:19:48] REQUEST recibido: Array
+(
+    [action] => guardar_cita
+    [nom_cit] => Cita desde el celular
+    [cit_cit] => 2025-07-25
+    [hor_cit] => 09:00:00
+)
+
+[2025-07-25 20:19:55] REQUEST recibido: Array
+(
+    [action] => actualizar_cita
+    [campo] => id_cit
+    [valor] => 227
+    [id_cit] => 227
+)
+
+[2025-07-25 20:19:55] REQUEST recibido: Array
+(
+    [action] => actualizar_cita
+    [campo] => cit_cit
+    [valor] => 2025-07-08
+    [id_cit] => 227
+)
+
+[2025-07-25 20:20:10] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:20:10] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:20:10] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:20:11] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:20:11] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:20:11] - fecha_inicio: 2025-07-18
+[2025-07-25 20:20:11] - fecha_fin: 2025-07-25
+[2025-07-25 20:20:11] - id_ejecutivo: null
+[2025-07-25 20:20:11] - id_plantel: null
+[2025-07-25 20:20:11] - tipo_ejecutivo: null
+[2025-07-25 20:20:11] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:20:11] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:20:11] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:20:11] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:20:11] - Citas encontradas: 3
+[2025-07-25 20:20:12] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:20:12] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:20:12] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:20:12] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:20:12] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:20:18] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:20:18] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:20:19] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:20:19] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:20:19] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:20:19] - fecha_inicio: 2025-07-18
+[2025-07-25 20:20:19] - fecha_fin: 2025-07-25
+[2025-07-25 20:20:19] - id_ejecutivo: null
+[2025-07-25 20:20:19] - id_plantel: null
+[2025-07-25 20:20:19] - tipo_ejecutivo: null
+[2025-07-25 20:20:19] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:20:19] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:20:19] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:20:19] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:20:19] - Citas encontradas: 3
+[2025-07-25 20:20:20] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:20:20] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:20:20] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:20:20] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:20:20] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:28:15] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:28:15] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:28:16] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:28:16] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:28:16] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:28:16] - fecha_inicio: 2025-07-18
+[2025-07-25 20:28:16] - fecha_fin: 2025-07-25
+[2025-07-25 20:28:16] - id_ejecutivo: null
+[2025-07-25 20:28:16] - id_plantel: null
+[2025-07-25 20:28:16] - tipo_ejecutivo: null
+[2025-07-25 20:28:16] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:28:16] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:28:17] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:28:17] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:28:17] - Citas encontradas: 3
+[2025-07-25 20:28:17] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:17] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:17] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:17] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:28:17] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:28:20] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:28:20] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:28:20] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:28:21] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:28:21] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:28:21] - fecha_inicio: 2025-07-18
+[2025-07-25 20:28:21] - fecha_fin: 2025-07-25
+[2025-07-25 20:28:21] - id_ejecutivo: null
+[2025-07-25 20:28:21] - id_plantel: null
+[2025-07-25 20:28:21] - tipo_ejecutivo: null
+[2025-07-25 20:28:21] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:28:21] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:28:21] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:28:21] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:28:21] - Citas encontradas: 3
+[2025-07-25 20:28:22] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:22] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:22] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:22] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:28:22] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:28:28] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:28] REQUEST recibido: Array
+(
+    [action] => eliminar_color
+    [id_color] => 44
+)
+
+[2025-07-25 20:28:29] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:28:29] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:28:29] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:28:30] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:28:30] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:28:30] - fecha_inicio: 2025-07-18
+[2025-07-25 20:28:30] - fecha_fin: 2025-07-25
+[2025-07-25 20:28:30] - id_ejecutivo: null
+[2025-07-25 20:28:30] - id_plantel: null
+[2025-07-25 20:28:30] - tipo_ejecutivo: null
+[2025-07-25 20:28:30] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:28:30] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:28:30] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:28:30] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:28:30] - Citas encontradas: 3
+[2025-07-25 20:28:31] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:31] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:31] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:31] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:31] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:28:31] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:28:33] REQUEST recibido: Array
+(
+    [action] => obtener_estructura_tabla
+)
+
+[2025-07-25 20:28:33] REQUEST recibido: Array
+(
+    [action] => obtener_ejecutivos
+)
+
+[2025-07-25 20:28:33] REQUEST recibido: Array
+(
+    [action] => obtener_planteles
+)
+
+[2025-07-25 20:28:33] REQUEST recibido: Array
+(
+    [action] => obtener_citas
+    [fecha_inicio] => 2025-07-18
+    [fecha_fin] => 2025-07-25
+)
+
+[2025-07-25 20:28:33] FILTRO CITAS - Parámetros recibidos:
+[2025-07-25 20:28:33] - fecha_inicio: 2025-07-18
+[2025-07-25 20:28:33] - fecha_fin: 2025-07-25
+[2025-07-25 20:28:33] - id_ejecutivo: null
+[2025-07-25 20:28:33] - id_plantel: null
+[2025-07-25 20:28:33] - tipo_ejecutivo: null
+[2025-07-25 20:28:33] - incluir_planteles_asociados RAW: not set
+[2025-07-25 20:28:33] - incluir_planteles_asociados FINAL: false
+[2025-07-25 20:28:33] - WHERE clause: c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+[2025-07-25 20:28:33] - Query final: SELECT c.id_cit, c.cit_cit, c.hor_cit, c.nom_cit, c.tel_cit, c.id_eje2, c.id_eje_admin, c.id_eje_admision, c.eli_cit, c.est_cit, c.efe_cit, c.pla_cit, e.nom_eje, e.tipo as tipo_ejecutivo, p.nom_pla 
+					 FROM cita c
+					 LEFT JOIN ejecutivo e ON c.id_eje2 = e.id_eje
+					 LEFT JOIN plantel p ON c.pla_cit = p.id_pla
+					 WHERE c.eli_cit = 1 AND c.cit_cit >= '2025-07-18' AND c.cit_cit <= '2025-07-25'
+					 ORDER BY c.cit_cit ASC, c.hor_cit ASC
+[2025-07-25 20:28:33] - Citas encontradas: 3
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_colores
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 220
+)
+
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_comentarios
+    [id_cit] => 224
+)
+
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:28:34] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25
+[2025-07-25 20:28:34] REQUEST recibido: Array
+(
+    [action] => obtener_estadisticas_embudo
+)
+
+[2025-07-25 20:28:34] EMBUDO ESTADÍSTICAS - Total: 85, Efectivas: 48, Registros: 25

@@ -9,7 +9,6 @@ Curso
     Clase
         Contenido
             Comentarios
-Únicamente ejecutivos de tipo Administrativo pueden gestionar dicho módulo 🔐.
 El propósito es que ejecutivos de recién ingreso puedan consumir de forma versátil los cursos y contenidos generados, a través de una interfaz tipo stepper (de acuerdo al número de clases), así como poder interactuar a través de comentarios por si alguien presenta alguna duda, otro ejecutivo pueda responderle a la brevedad ⚡.
 Estructura de la clase
 ┌─────────────────────────────────────────────────────┐
