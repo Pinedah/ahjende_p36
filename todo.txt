@@ -1,0 +1,32 @@
+P36:
+A los 7 días de estar en rojo (semáforo) las cuentas de los ejecutivos deben eliminarse (ocultándose con la mecánica operativa del borrado lógico) 🔴.
+Implementación: Generar primero el stored procedure con la lógica de consulta + update, después crear el EVENT MySQL que lo ejecute cada 24hrs 🕐.
+
+P37: 
+Se requiere un módulo que permita administrar videos (mp4 o ligas de youtube), imágenes (jpeg, jpg o png), audios (mp3) o pdf y se organice en:
+
+Curso
+    Clase
+        Contenido
+            Comentarios
+Únicamente ejecutivos de tipo Administrativo pueden gestionar dicho módulo 🔐.
+El propósito es que ejecutivos de recién ingreso puedan consumir de forma versátil los cursos y contenidos generados, a través de una interfaz tipo stepper (de acuerdo al número de clases), así como poder interactuar a través de comentarios por si alguien presenta alguna duda, otro ejecutivo pueda responderle a la brevedad ⚡.
+Estructura de la clase
+┌─────────────────────────────────────────────────────┐
+│                    Título                           │
+├─────────────────────────────────────────────────────┤
+│                   Contenido                         │
+├─────────────────────────────────────────────────────┤
+│ Ejecutivo que creó el curso - Ejecutivo que creó    │
+│ la clase - Ejecutivo que creó el contenido -        │
+│ Fecha de creación de clase y contenido              │
+├─────────────────────────────────────────────────────┤
+│ Descripción - Opción de descarga                    │
+├─────────────────────────────────────────────────────┤
+│ Caja de comentarios (comentarios recursivos como FB)│
+└─────────────────────────────────────────────────────┘
+Videos (si son de tipo MP4) se obtiene de la carpeta /uploads 📹
+Si es video de tipo Youtube (URL) renderiza el video 🎞️
+Si es audio se renderiza el player 🎵
+Si es PDF se renderiza con PDF.js (https://github.com/mozilla/pdf.js) 📋
+NOTAEl contenido no estará asociado a ningún plantel, solo a los ejecutivos que hayan generado alguno de los elementos de la estructura del módulo (curso, clase o contenido) 🌐.
