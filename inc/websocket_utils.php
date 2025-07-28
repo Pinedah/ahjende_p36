@@ -1,20 +1,4 @@
 <?php
-function enviarMensajeWebSocket($mensaje) {
-    try {
-        // Para desarrollo local, el WebSocket broadcast se maneja por el cliente
-        // No necesitamos hacer broadcast desde el servidor en este entorno
-        
-        // Log para debugging (solo si es necesario)
-        // file_put_contents('debug_websocket.log', '[' . date('Y-m-d H:i:s') . '] Mensaje WebSocket: ' . json_encode($mensaje) . "\n", FILE_APPEND);
-        
-        return true; // Simular éxito ya que el WebSocket se maneja en frontend
-        
-    } catch (Exception $e) {
-        // Log del error pero no interrumpir el flujo
-        // file_put_contents('debug_websocket.log', '[' . date('Y-m-d H:i:s') . '] Error WebSocket: ' . $e->getMessage() . "\n", FILE_APPEND);
-        return false;
-    }
-}
 
 function notificarCambioPlantelEjecutivo($id_ejecutivo, $plantel_anterior, $plantel_nuevo, $nombre_ejecutivo, $connection = null) {
     // Obtener nombres de planteles para el mensaje

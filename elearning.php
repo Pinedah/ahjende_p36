@@ -59,17 +59,20 @@
         
         .course-item {
             cursor: pointer;
-            padding: 10px 15px;
-            margin-right: 10px;
-            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
             border: 1px solid #dee2e6;
             background: white;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .course-item:hover {
             background: #f8f9fa;
             border-color: #007bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
         
         .course-item.active {
@@ -87,10 +90,11 @@
         .stepper {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             margin-bottom: 30px;
             overflow-x: auto;
             padding: 10px 0;
+            gap: 20px;
         }
         
         .step {
@@ -100,6 +104,7 @@
             min-width: 120px;
             cursor: pointer;
             position: relative;
+            flex-shrink: 0;
         }
         
         .step-circle {
@@ -301,7 +306,7 @@
         
         .comment-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: between;
             align-items: center;
             margin-bottom: 10px;
         }
@@ -330,44 +335,6 @@
             margin-top: 15px;
             padding-left: 15px;
             border-left: 2px solid #e9ecef;
-        }
-        
-        /* Botones de administración */
-        .admin-panel {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .admin-panel h5 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .btn-admin {
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        
-        /* Formularios modales */
-        .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .modal-header .close {
-            color: white;
-            opacity: 0.8;
-        }
-        
-        .modal-header .close:hover {
-            opacity: 1;
-        }
-        
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
         }
         
         /* Responsive */
@@ -409,6 +376,15 @@
             margin-bottom: 20px;
             opacity: 0.5;
         }
+
+        /* PDF Controls */
+        .pdf-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -417,14 +393,18 @@
         <div class="main-container">
             <div class="header-section">
                 <h3><i class="fas fa-graduation-cap mr-2"></i>Sistema de E-Learning</h3>
+                <small>Plataforma de Aprendizaje Digital SICAM</small>
             </div>
             
             <!-- Navegación de cursos -->
             <div class="courses-nav">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 class="mb-0">Cursos Disponibles</h6>
+                    <button class="btn btn-primary btn-sm" onclick="cargarCursos()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
                 </div>
-                <div id="courses-list" class="d-flex flex-wrap">
+                <div id="courses-list">
                     <!-- Los cursos se cargarán aquí dinámicamente -->
                 </div>
             </div>
@@ -432,627 +412,709 @@
         
         <!-- Contenido principal del curso -->
         <div class="main-container" id="course-content" style="display: none;">
+            <!-- Stepper de navegación de clases -->
+            <div class="stepper-container mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 id="course-title">Clases del Curso</h5>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="volverACursos()">
+                        <i class="fas fa-arrow-left"></i> Volver a Cursos
+                    </button>
+                </div>
+                <div class="stepper" id="classes-stepper">
+                    <!-- Los steppers se cargarán aquí -->
+                </div>
+            </div>
+            
             <!-- Contenido de la clase actual -->
             <div id="class-content-area">
                 <!-- El contenido se cargará aquí -->
             </div>
         </div>
+    </div>
+
+<!-- Bootstrap 4 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Variables globales
+    let cursoActual = null;
+    let claseActual = null;
+    let clasesDelCurso = [];
+    let ejecutivoActual = 1; // Usuario logueado por defecto
+
+    // Cargar cursos al iniciar
+    $(document).ready(function() {
+        cargarCursos();
+    });
+
+    // =====================================
+    // FUNCIONES DE COMUNICACIÓN CON EL SERVIDOR
+    // =====================================
+    
+    function llamarServidor(action, data = {}, callback = null, errorCallback = null) {
+        data.action = action;
         
-        <!-- Sección de comentarios -->
-        <div class="comments-section main-container" id="comments-section" style="display: none;">
-            <div class="comments-header">
-                <h5><i class="fas fa-comments mr-2"></i>Comentarios y Discusión</h5>
-            </div>
-            
-            <!-- Formulario para nuevo comentario -->
-            <div class="comment-form">
-                <div class="form-group">
-                    <textarea class="form-control" id="nuevo-comentario" rows="3" placeholder="Escribe tu comentario o pregunta..."></textarea>
-                </div>
-                <button class="btn btn-primary" onclick="agregarComentario()">
-                    <i class="fas fa-paper-plane mr-1"></i>Publicar Comentario
-                </button>
-            </div>
-            
-            <!-- Lista de comentarios -->
-            <div id="comments-list">
-                <!-- Los comentarios se cargarán aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para crear/editar curso -->
-    <div class="modal fade" id="modalCurso" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-graduation-cap mr-2"></i>
-                        <span id="titulo-modal-curso">Crear Nuevo Curso</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-curso">
-                        <input type="hidden" id="curso-id" name="id">
-                        <div class="form-group">
-                            <label for="curso-nombre">Nombre del Curso</label>
-                            <input type="text" class="form-control" id="curso-nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="curso-descripcion">Descripción</label>
-                            <textarea class="form-control" id="curso-descripcion" name="descripcion" rows="4"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarCurso()">Guardar Curso</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para crear/editar clase -->
-    <div class="modal fade" id="modalClase" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-chalkboard mr-2"></i>
-                        <span id="titulo-modal-clase">Crear Nueva Clase</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-clase">
-                        <input type="hidden" id="clase-id" name="id">
-                        <div class="form-group">
-                            <label for="clase-curso">Curso</label>
-                            <select class="form-control" id="clase-curso" name="id_curso" required>
-                                <option value="">Seleccionar curso...</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="clase-titulo">Título de la Clase</label>
-                            <input type="text" class="form-control" id="clase-titulo" name="titulo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="clase-descripcion">Descripción</label>
-                            <textarea class="form-control" id="clase-descripcion" name="descripcion" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="clase-orden">Orden en el curso</label>
-                            <input type="number" class="form-control" id="clase-orden" name="orden" min="1" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarClase()">Guardar Clase</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para subir contenido -->
-    <div class="modal fade" id="modalContenido" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-upload mr-2"></i>
-                        <span id="titulo-modal-contenido">Subir Contenido</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-contenido" enctype="multipart/form-data">
-                        <input type="hidden" id="contenido-id" name="id">
-                        <div class="form-group">
-                            <label for="contenido-clase">Clase</label>
-                            <select class="form-control" id="contenido-clase" name="id_clase" required>
-                                <option value="">Seleccionar clase...</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="contenido-titulo">Título del Contenido</label>
-                            <input type="text" class="form-control" id="contenido-titulo" name="titulo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contenido-tipo">Tipo de Contenido</label>
-                            <select class="form-control" id="contenido-tipo" name="tipo" required onchange="mostrarCamposSegunTipo()">
-                                <option value="">Seleccionar tipo...</option>
-                                <option value="video_archivo">Video (MP4)</option>
-                                <option value="video_youtube">Video (YouTube)</option>
-                                <option value="audio">Audio (MP3)</option>
-                                <option value="pdf">Documento PDF</option>
-                                <option value="imagen">Imagen (JPG, PNG)</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="campo-archivo" style="display: none;">
-                            <label for="contenido-archivo">Archivo</label>
-                            <input type="file" class="form-control-file" id="contenido-archivo" name="archivo" accept="">
-                        </div>
-                        <div class="form-group" id="campo-url" style="display: none;">
-                            <label for="contenido-url">URL de YouTube</label>
-                            <input type="url" class="form-control" id="contenido-url" name="url" placeholder="https://www.youtube.com/watch?v=...">
-                        </div>
-                        <div class="form-group">
-                            <label for="contenido-descripcion">Descripción</label>
-                            <textarea class="form-control" id="contenido-descripcion" name="descripcion" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarContenido()">Subir Contenido</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Variables globales
-        let cursoActual = null;
-        let claseActual = null;
-        let ejecutivoActual = 1; // Simular ejecutivo logueado
-
-        // Cargar cursos al iniciar
-        $(document).ready(function() {
-            cargarCursos();
-        });
-
-        // Funciones principales
-        function cargarCursos() {
-            // Simular carga de cursos
-            const cursosEjemplo = [
-                {id: 1, nombre: "Introducción al Sistema", descripcion: "Curso básico para nuevos ejecutivos", total_clases: 3},
-                {id: 2, nombre: "Gestión de Citas", descripcion: "Manejo avanzado del sistema de citas", total_clases: 5},
-                {id: 3, nombre: "Reportes y Análisis", descripcion: "Generación de reportes y análisis de datos", total_clases: 4}
-            ];
-            mostrarCursos(cursosEjemplo);
-        }
-
-        function mostrarCursos(cursos) {
-            const container = $('#courses-list');
-            container.empty();
-            
-            if (cursos.length === 0) {
-                container.html(`
-                    <div class="empty-state w-100">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h5>No hay cursos disponibles</h5>
-                        <p>Crea el primer curso para comenzar</p>
-                    </div>
-                `);
-                return;
-            }
-            
-            cursos.forEach(curso => {
-                const cursoItem = $(`
-                    <div class="course-item" data-id="${curso.id}" onclick="seleccionarCurso(${curso.id})">
-                        <h6 class="mb-2">${curso.nombre}</h6>
-                        <small class="text-muted">${curso.total_clases} clases</small>
-                        <p class="mb-0 mt-2" style="font-size: 13px;">${curso.descripcion}</p>
-                    </div>
-                `);
-                container.append(cursoItem);
-            });
-        }
-
-        function seleccionarCurso(idCurso) {
-            cursoActual = idCurso;
-            $('.course-item').removeClass('active');
-            $(`.course-item[data-id="${idCurso}"]`).addClass('active');
-            
-            cargarClasesCurso(idCurso);
-            $('#course-content').show();
-        }
-
-        function cargarClasesCurso(idCurso) {
-            // Simular carga de clases
-            const clasesEjemplo = [
-                {id: 1, titulo: "Bienvenida", orden: 1, completada: true},
-                {id: 2, titulo: "Navegación Básica", orden: 2, completada: false},
-                {id: 3, titulo: "Funciones Avanzadas", orden: 3, completada: false}
-            ];
-            
-            mostrarStepper(clasesEjemplo);
-            if (clasesEjemplo.length > 0) {
-                seleccionarClase(clasesEjemplo[0].id);
-            }
-        }
-
-        function mostrarStepper(clases) {
-            const stepper = $('#classes-stepper');
-            stepper.empty();
-            
-            clases.forEach((clase, index) => {
-                const isActive = index === 0; // Primera clase activa por defecto
-                const stepHtml = `
-                    <div class="step ${clase.completada ? 'completed' : ''} ${isActive ? 'active' : ''}" 
-                         data-id="${clase.id}" onclick="seleccionarClase(${clase.id})">
-                        <div class="step-circle">
-                            ${clase.completada ? '<i class="fas fa-check"></i>' : clase.orden}
-                        </div>
-                        <div class="step-title">${clase.titulo}</div>
-                    </div>
-                `;
-                stepper.append(stepHtml);
-                
-                if (index < clases.length - 1) {
-                    stepper.append('<div class="step-connector"></div>');
-                }
-            });
-        }
-
-        function seleccionarClase(idClase) {
-            claseActual = idClase;
-            $('.step').removeClass('active');
-            $(`.step[data-id="${idClase}"]`).addClass('active');
-            
-            cargarContenidoClase(idClase);
-            $('#comments-section').show();
-        }
-
-        function cargarContenidoClase(idClase) {
-            // Simular contenido de clase
-            const contenidoEjemplo = {
-                titulo: "Información del Curso",
-                ejecutivo_curso: "Juan Pérez",
-                ejecutivo_clase: "María González",
-                fecha_creacion: "2025-01-15",
-                contenidos: [
-                    {
-                        id: 1,
-                        titulo: "Video Introductorio",
-                        tipo: "video_youtube",
-                        url: "https://www.youtube.com/watch?v=xAWDqdpOlu8&ab_channel=BillieEilish",
-                        descripcion: "Introducción general al sistema de gestión",
-                        ejecutivo: "Carlos Ruiz",
-                        fecha: "2025-01-15"
-                    },
-                    {
-                        id: 2,
-                        titulo: "Manual de Usuario",
-                        tipo: "pdf",
-                        archivo: "manual_usuario.pdf",
-                        descripcion: "Documentación completa del sistema",
-                        ejecutivo: "Ana Martín",
-                        fecha: "2025-01-16"
+        $.ajax({
+            url: 'server/controlador_elearning.php',
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                console.log('Respuesta del servidor:', response);
+                if (response.success) {
+                    if (callback) callback(response.data, response.message);
+                } else {
+                    console.error('Error del servidor:', response.message);
+                    if (errorCallback) {
+                        errorCallback(response.message);
+                    } else {
+                        mostrarNotificacion('Error: ' + response.message, 'error');
                     }
-                ]
-            };
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error en la comunicación:', error);
+                const mensaje = 'Error de comunicación con el servidor';
+                if (errorCallback) {
+                    errorCallback(mensaje);
+                } else {
+                    mostrarNotificacion(mensaje, 'error');
+                }
+            }
+        });
+    }
+
+    // =====================================
+    // FUNCIONES PRINCIPALES
+    // =====================================
+
+    function cargarCursos() {
+        mostrarCargando('#courses-list');
+        
+        llamarServidor('obtener_cursos', {}, function(cursos) {
+            mostrarCursos(cursos);
+        }, function(error) {
+            $('#courses-list').html(`
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> Error al cargar cursos: ${error}
+                </div>
+            `);
+        });
+    }
+
+    function mostrarCursos(cursos) {
+        const container = $('#courses-list');
+        
+        if (cursos.length === 0) {
+            container.html(`
+                <div class="empty-state">
+                    <i class="fas fa-book-open"></i>
+                    <h5>No hay cursos disponibles</h5>
+                    <p>Aún no se han creado cursos en la plataforma.</p>
+                </div>
+            `);
+            return;
+        }
+        
+        let html = '';
+        cursos.forEach(curso => {
+            html += `
+                <div class="course-item" onclick="seleccionarCurso(${curso.id_curso}, '${curso.nom_curso}')">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-2 text-primary">${curso.nom_curso}</h6>
+                            <p class="text-muted mb-2 small">${curso.des_curso}</p>
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span><i class="fas fa-book"></i> ${curso.total_clases} clases</span>
+                                <span><i class="fas fa-user"></i> ${curso.creador_curso}</span>
+                            </div>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> ${formatearFecha(curso.fec_creacion_curso)}
+                            </small>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.html(html);
+    }
+
+    function seleccionarCurso(idCurso, nombreCurso) {
+        cursoActual = { id_curso: idCurso, nom_curso: nombreCurso };
+        cargarClasesCurso(idCurso);
+    }
+
+    function cargarClasesCurso(idCurso) {
+        mostrarCargando('#classes-stepper');
+        
+        llamarServidor('obtener_clases_curso', { id_curso: idCurso }, function(clases) {
+            clasesDelCurso = clases || [];
+            mostrarStepper(clases);
             
-            mostrarContenidoClase(contenidoEjemplo);
+            // Mostrar el contenido del curso y ocultar la lista de cursos
+            $('#course-content').show();
+            $('#course-title').text(`Clases de: ${cursoActual.nom_curso}`);
+            
+            // Seleccionar la primera clase automáticamente
+            if (clases && clases.length > 0) {
+                seleccionarClase(clases[0].id_clase, 0);
+            }
+        }, function(error) {
+            mostrarNotificacion('Error al cargar clases: ' + error, 'error');
+        });
+    }
+
+    function mostrarStepper(clases) {
+        const container = $('#classes-stepper');
+        
+        if (!clases || clases.length === 0) {
+            container.html(`
+                <div class="empty-state">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <p>Este curso aún no tiene clases disponibles.</p>
+                </div>
+            `);
+            return;
         }
 
-        function mostrarContenidoClase(contenido) {
-            const contentArea = $('#class-content-area');
-            let html = `
-                <div class="class-content">
-                    <div class="class-header">
-                        <h4 class="class-title">${contenido.titulo}</h4>
-                        <div class="class-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-user"></i>
-                                <span>Creador del curso: ${contenido.ejecutivo_curso}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                <span>Creador de la clase: ${contenido.ejecutivo_clase}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>Fecha de creación: ${contenido.fecha_creacion}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content-area">
+        let html = '';
+        clases.forEach((clase, index) => {
+            html += `
+                <div class="step ${index === 0 ? 'active' : ''}" onclick="seleccionarClase(${clase.id_clase}, ${index})">
+                    <div class="step-circle">${index + 1}</div>
+                    <div class="step-title">${clase.tit_clase}</div>
+                </div>
             `;
             
-            contenido.contenidos.forEach(item => {
-                html += generarContenidoItem(item);
-            });
-            
-            html += '</div></div>';
-            contentArea.html(html);
+            // Agregar conector excepto en el último elemento
+            if (index < clases.length - 1) {
+                html += '<div class="step-connector"></div>';
+            }
+        });
+        
+        container.html(html);
+    }
+
+    function seleccionarClase(idClase, indice) {
+        claseActual = idClase;
+        
+        // Actualizar stepper activo
+        $('#classes-stepper .step').removeClass('active');
+        $('#classes-stepper .step').eq(indice).addClass('active');
+        
+        // Cargar contenido de la clase
+        cargarContenidoClase(idClase);
+    }
+
+    function cargarContenidoClase(idClase) {
+        mostrarCargando('#class-content-area');
+        
+        llamarServidor('obtener_contenido_clase', { id_clase: idClase }, function(data) {
+            mostrarContenidoClase(data);
+        }, function(error) {
+            $('#class-content-area').html(`
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> Error al cargar contenido: ${error}
+                </div>
+            `);
+        });
+    }
+
+    function mostrarContenidoClase(data) {
+        const clase = data.clase;
+        const contenidos = data.contenidos || [];
+        
+        if (contenidos.length === 0) {
+            $('#class-content-area').html(`
+                <div class="main-container">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h5>No hay contenido disponible</h5>
+                        <p>Esta clase aún no tiene contenido agregado.</p>
+                    </div>
+                </div>
+            `);
+            return;
         }
 
-        function generarContenidoItem(item) {
-            const typeClasses = {
-                'video_youtube': 'content-type-video',
-                'video_archivo': 'content-type-video',
-                'audio': 'content-type-audio',
-                'pdf': 'content-type-pdf',
-                'imagen': 'content-type-image'
-            };
-            
-            const typeIcons = {
-                'video_youtube': 'fas fa-video',
-                'video_archivo': 'fas fa-video',
-                'audio': 'fas fa-volume-up',
-                'pdf': 'fas fa-file-pdf',
-                'imagen': 'fas fa-image'
-            };
-            
-            let mediaContent = '';
-            
-            switch(item.tipo) {
-                case 'video_youtube':
-                    mediaContent = `
-                        <div class="video-player">
-                            <iframe src="${item.url}" frameborder="0" allowfullscreen 
-                                    style="width: 100%; height: 450px;"></iframe>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'video_archivo':
-                    mediaContent = `
-                        <div class="video-player">
-                            <video controls style="width: 100%; max-height: 450px;">
-                                <source src="uploads/${item.archivo}" type="video/mp4">
-                                Tu navegador no soporta el elemento video.
-                            </video>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'audio':
-                    mediaContent = `
-                        <audio controls class="audio-player">
-                            <source src="uploads/${item.archivo}" type="audio/mpeg">
-                            Tu navegador no soporta el elemento audio.
-                        </audio>
-                    `;
-                    break;
-                    
-                case 'pdf':
-                    mediaContent = `
-                        <div class="pdf-container">
-                            <iframe src="uploads/${item.archivo}" class="pdf-viewer" 
-                                    type="application/pdf">
-                                <p>Tu navegador no puede mostrar PDFs. 
-                                   <a href="uploads/${item.archivo}" target="_blank">Haz clic aquí para descargar</a>
-                                </p>
-                            </iframe>
-                        </div>
-                    `;
-                    break;
-                    
-                case 'imagen':
-                    mediaContent = `
-                        <img src="uploads/${item.archivo}" alt="${item.titulo}" class="image-viewer">
-                    `;
-                    break;
+        let html = '';
+        
+        contenidos.forEach(contenido => {
+            html += generarContenidoItem(contenido);
+        });
+        
+        $('#class-content-area').html(html);
+        
+        // Cargar comentarios para cada contenido
+        contenidos.forEach(contenido => {
+            cargarComentarios(contenido.id_contenido);
+            // Si es PDF, renderizar después de insertar el HTML
+            if (contenido.tip_contenido === 'pdf' && contenido.arc_contenido) {
+                setTimeout(() => {
+                    renderPDF(`uploads/${contenido.arc_contenido}`, contenido.id_contenido);
+                }, 200);
             }
-            
-            return `
-                <div class="content-item">
-                    <div class="content-header">
-                        <div>
-                            <h6 class="mb-1">${item.titulo}</h6>
-                            <small class="text-muted">Por ${item.ejecutivo} - ${item.fecha}</small>
+        });
+    }
+
+    function generarContenidoItem(contenido) {
+        const tipoClase = getTipoClase(contenido.tip_contenido);
+        const rutaArchivo = `uploads/${contenido.arc_contenido}`;
+        
+        return `
+            <div class="main-container content-item" data-contenido-id="${contenido.id_contenido}">
+                <!-- Header del contenido -->
+                <div class="class-header">
+                    <div class="class-title">${contenido.tit_contenido}</div>
+                    <div class="class-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-user"></i>
+                            <span>Creado por: ${contenido.creador_contenido}</span>
                         </div>
-                        <span class="content-type-badge ${typeClasses[item.tipo]}">
-                            <i class="${typeIcons[item.tipo]} mr-1"></i>
-                            ${item.tipo.replace('_', ' ').toUpperCase()}
-                        </span>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${formatearFecha(contenido.fec_creacion_contenido)}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="content-type-badge ${tipoClase}">${getTipoTexto(contenido.tip_contenido)}</span>
+                        </div>
                     </div>
-                    <div class="content-body">
-                        ${mediaContent}
-                        ${item.descripcion ? `
-                            <div class="content-description">
-                                <strong>Descripción:</strong> ${item.descripcion}
-                            </div>
-                        ` : ''}
+                </div>
+                
+                <!-- Contenido multimedia -->
+                <div class="content-area">
+                    ${generarVisualizadorContenido(contenido)}
+                    
+                    <!-- Descripción -->
+                    ${contenido.des_contenido ? `
+                        <div class="content-description">
+                            <strong>Descripción:</strong> ${contenido.des_contenido}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Opción de descarga -->
+                    ${contenido.arc_contenido ? `
                         <div class="download-section">
-                            <button class="btn btn-outline-primary btn-sm" onclick="descargarContenido('${item.archivo || item.url}')">
-                                <i class="fas fa-download mr-1"></i>Descargar
+                            <a href="${rutaArchivo}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-download"></i> Descargar archivo
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <!-- Sección de comentarios -->
+                <div class="comments-section">
+                    <div class="comments-header">
+                        <h6><i class="fas fa-comments mr-2"></i>Comentarios</h6>
+                    </div>
+                    
+                    <!-- Formulario para nuevo comentario -->
+                    <div class="comment-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Escribe un comentario..." 
+                                   id="input-comentario-${contenido.id_contenido}"
+                                   onkeypress="if(event.key === 'Enter') agregarComentario(${contenido.id_contenido})">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" onclick="agregarComentario(${contenido.id_contenido})">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de comentarios -->
+                    <div id="comments-${contenido.id_contenido}">
+                        <div class="loading-indicator">
+                            <i class="fas fa-spinner fa-spin"></i> Cargando comentarios...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // =====================================
+    // FUNCIONES DE COMENTARIOS
+    // =====================================
+
+    function cargarComentarios(idContenido) {
+        llamarServidor('obtener_comentarios_contenido', { id_contenido: idContenido }, function(comentarios) {
+            mostrarComentarios(idContenido, comentarios);
+        }, function(error) {
+            $(`#comments-${idContenido}`).html(`
+                <div class="alert alert-warning">
+                    <small>Error al cargar comentarios: ${error}</small>
+                </div>
+            `);
+        });
+    }
+
+    function mostrarComentarios(idContenido, comentarios) {
+        const container = $(`#comments-${idContenido}`);
+        
+        if (!comentarios || comentarios.length === 0) {
+            container.html(`
+                <div class="text-muted text-center py-3">
+                    <small><i class="fas fa-comments"></i> No hay comentarios aún. ¡Sé el primero en comentar!</small>
+                </div>
+            `);
+            return;
+        }
+
+        let html = '';
+        comentarios.forEach(comentario => {
+            html += generarHtmlComentario(comentario);
+        });
+        
+        container.html(html);
+    }
+
+    function generarHtmlComentario(comentario) {
+        let html = `
+            <div class="comment-item" data-comentario-id="${comentario.id_comentario}">
+                <div class="comment-header">
+                    <span class="comment-author">${comentario.autor_comentario}</span>
+                    <span class="comment-date">${formatearFechaHora(comentario.fec_comentario)}</span>
+                </div>
+                <div class="comment-content">${comentario.tex_comentario}</div>
+                <div class="comment-actions">
+                    <button class="btn btn-link btn-sm p-0" onclick="responderComentario(${comentario.id_comentario})">
+                        <i class="fas fa-reply"></i> Responder
+                    </button>
+                </div>
+                
+                <!-- Formulario de respuesta (oculto inicialmente) -->
+                <div class="comment-form mt-2" id="respuesta-form-${comentario.id_comentario}" style="display: none;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="Escribe tu respuesta..." 
+                               id="input-respuesta-${comentario.id_comentario}"
+                               onkeypress="if(event.key === 'Enter') enviarRespuesta(${comentario.id_comentario})">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" onclick="enviarRespuesta(${comentario.id_comentario})">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="btn btn-secondary" onclick="cancelarRespuesta(${comentario.id_comentario})">
+                                <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-            `;
-        }
+        `;
 
-        // Funciones de modales
-        function mostrarModalCurso() {
-            $('#modalCurso').modal('show');
-            $('#form-curso')[0].reset();
-            $('#curso-id').val('');
-            $('#titulo-modal-curso').text('Crear Nuevo Curso');
-        }
-
-        function mostrarModalClase() {
-            cargarCursosEnSelect();
-            $('#modalClase').modal('show');
-            $('#form-clase')[0].reset();
-            $('#clase-id').val('');
-            $('#titulo-modal-clase').text('Crear Nueva Clase');
-        }
-
-        function mostrarModalContenido() {
-            cargarClasesEnSelect();
-            $('#modalContenido').modal('show');
-            $('#form-contenido')[0].reset();
-            $('#contenido-id').val('');
-            $('#titulo-modal-contenido').text('Subir Contenido');
-        }
-
-        function cargarCursosEnSelect() {
-            // Simular carga en select
-            const select = $('#clase-curso');
-            select.html('<option value="">Seleccionar curso...</option>');
-            select.append('<option value="1">Introducción al Sistema</option>');
-            select.append('<option value="2">Gestión de Citas</option>');
-        }
-
-        function cargarClasesEnSelect() {
-            // Simular carga en select
-            const select = $('#contenido-clase');
-            select.html('<option value="">Seleccionar clase...</option>');
-            select.append('<option value="1">Bienvenida</option>');
-            select.append('<option value="2">Navegación Básica</option>');
-        }
-
-        function mostrarCamposSegunTipo() {
-            const tipo = $('#contenido-tipo').val();
-            const campoArchivo = $('#campo-archivo');
-            const campoUrl = $('#campo-url');
-            const inputArchivo = $('#contenido-archivo');
-            
-            campoArchivo.hide();
-            campoUrl.hide();
-            
-            if (tipo === 'video_youtube') {
-                campoUrl.show();
-            } else if (tipo !== '') {
-                campoArchivo.show();
-                
-                // Configurar accept según tipo
-                switch(tipo) {
-                    case 'video_archivo':
-                        inputArchivo.attr('accept', '.mp4');
-                        break;
-                    case 'audio':
-                        inputArchivo.attr('accept', '.mp3');
-                        break;
-                    case 'pdf':
-                        inputArchivo.attr('accept', '.pdf');
-                        break;
-                    case 'imagen':
-                        inputArchivo.attr('accept', '.jpg,.jpeg,.png');
-                        break;
-                }
-            }
-        }
-
-        // Funciones de guardado
-        function guardarCurso() {
-            const formData = new FormData($('#form-curso')[0]);
-            // Aquí iría la llamada AJAX al servidor
-            console.log('Guardando curso:', Object.fromEntries(formData));
-            $('#modalCurso').modal('hide');
-            cargarCursos();
-        }
-
-        function guardarClase() {
-            const formData = new FormData($('#form-clase')[0]);
-            // Aquí iría la llamada AJAX al servidor
-            console.log('Guardando clase:', Object.fromEntries(formData));
-            $('#modalClase').modal('hide');
-            if (cursoActual) {
-                cargarClasesCurso(cursoActual);
-            }
-        }
-
-        function guardarContenido() {
-            const formData = new FormData($('#form-contenido')[0]);
-            // Aquí iría la llamada AJAX al servidor para subir archivo
-            console.log('Guardando contenido:', Object.fromEntries(formData));
-            $('#modalContenido').modal('hide');
-            if (claseActual) {
-                cargarContenidoClase(claseActual);
-            }
-        }
-
-        // Funciones de comentarios
-        function agregarComentario() {
-            const contenido = $('#nuevo-comentario').val().trim();
-            if (!contenido) return;
-            
-            // llamada a AJAX
-            console.log('Agregando comentario:', contenido);
-            $('#nuevo-comentario').val('');
-            cargarComentarios();
-        }
-
-        function cargarComentarios() {
-            // Simular comentarios
-            const comentarios = [
-                {
-                    id: 1,
-                    autor: "María González",
-                    fecha: "2025-01-20 10:30",
-                    contenido: "Excelente explicación en el video. Me ayudó mucho a entender el proceso.",
-                    respuestas: [
-                        {
-                            id: 2,
-                            autor: "Juan Pérez",
-                            fecha: "2025-01-20 11:15",
-                            contenido: "Me alegra que te haya sido útil. Si tienes más dudas, no dudes en preguntar."
-                        }
-                    ]
-                }
-            ];
-            
-            mostrarComentarios(comentarios);
-        }
-
-        function mostrarComentarios(comentarios) {
-            const container = $('#comments-list');
-            container.empty();
-            
-            comentarios.forEach(comentario => {
-                let html = `
+        // Agregar respuestas si las hay
+        if (comentario.respuestas && comentario.respuestas.length > 0) {
+            html += '<div class="reply-section">';
+            comentario.respuestas.forEach(respuesta => {
+                html += `
                     <div class="comment-item">
                         <div class="comment-header">
-                            <span class="comment-author">${comentario.autor}</span>
-                            <span class="comment-date">${comentario.fecha}</span>
+                            <span class="comment-author">${respuesta.autor_comentario}</span>
+                            <span class="comment-date">${formatearFechaHora(respuesta.fec_comentario)}</span>
                         </div>
-                        <div class="comment-content">${comentario.contenido}</div>
-                        <div class="comment-actions">
-                            <button class="btn btn-sm btn-outline-primary" onclick="responderComentario(${comentario.id})">
-                                <i class="fas fa-reply mr-1"></i>Responder
-                            </button>
-                        </div>
+                        <div class="comment-content">${respuesta.tex_comentario}</div>
+                    </div>
                 `;
-                
-                if (comentario.respuestas && comentario.respuestas.length > 0) {
-                    html += '<div class="reply-section">';
-                    comentario.respuestas.forEach(respuesta => {
-                        html += `
-                            <div class="comment-item">
-                                <div class="comment-header">
-                                    <span class="comment-author">${respuesta.autor}</span>
-                                    <span class="comment-date">${respuesta.fecha}</span>
-                                </div>
-                                <div class="comment-content">${respuesta.contenido}</div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                }
-                
-                html += '</div>';
-                container.append(html);
+            });
+            html += '</div>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    function agregarComentario(idContenido) {
+        const input = $(`#input-comentario-${idContenido}`);
+        const comentario = input.val().trim();
+        
+        if (comentario) {
+            llamarServidor('agregar_comentario', {
+                id_contenido: idContenido,
+                comentario: comentario,
+                id_ejecutivo: ejecutivoActual
+            }, function(data, mensaje) {
+                mostrarNotificacion(mensaje, 'success');
+                input.val('');
+                cargarComentarios(idContenido);
             });
         }
+    }
 
-        function responderComentario(idComentario) {
-            // Implementar funcionalidad de respuesta
-            console.log('Respondiendo al comentario:', idComentario);
+    function responderComentario(idComentario) {
+        // Ocultar otros formularios de respuesta
+        $('[id^="respuesta-form-"]').hide();
+        
+        // Mostrar el formulario de respuesta para este comentario
+        $(`#respuesta-form-${idComentario}`).show();
+        $(`#input-respuesta-${idComentario}`).focus();
+    }
+
+    function enviarRespuesta(idComentarioPadre) {
+        const input = $(`#input-respuesta-${idComentarioPadre}`);
+        const respuesta = input.val().trim();
+        
+        if (respuesta) {
+            // Encontrar el contenido al que pertenece este comentario
+            const contenidoContainer = $(`#respuesta-form-${idComentarioPadre}`).closest('[data-contenido-id]');
+            const idContenido = contenidoContainer.data('contenido-id');
+            
+            llamarServidor('agregar_comentario', {
+                id_contenido: idContenido,
+                comentario: respuesta,
+                id_comentario_padre: idComentarioPadre,
+                id_ejecutivo: ejecutivoActual
+            }, function(data, mensaje) {
+                mostrarNotificacion(mensaje, 'success');
+                input.val('');
+                $(`#respuesta-form-${idComentarioPadre}`).hide();
+                cargarComentarios(idContenido);
+            });
         }
+    }
 
-        function descargarContenido(archivo) {
-            // Implementar descarga
-            console.log('Descargando:', archivo);
-            window.open('uploads/' + archivo, '_blank');
-        }
+    function cancelarRespuesta(idComentario) {
+        $(`#respuesta-form-${idComentario}`).hide();
+        $(`#input-respuesta-${idComentario}`).val('');
+    }
 
-        // Cargar comentarios al iniciar
+    // =====================================
+    // FUNCIONES DE NAVEGACIÓN
+    // =====================================
+
+    function volverACursos() {
+        $('#course-content').hide();
+        cursoActual = null;
+        claseActual = null;
+        clasesDelCurso = [];
+    }
+
+    // =====================================
+    // FUNCIONES AUXILIARES
+    // =====================================
+
+    function mostrarCargando(selector) {
+        $(selector).html(`
+            <div class="loading-indicator">
+                <i class="fas fa-spinner fa-spin"></i> Cargando...
+            </div>
+        `);
+    }
+
+    function mostrarNotificacion(mensaje, tipo = 'info') {
+        const claseColor = tipo === 'error' ? 'alert-danger' : tipo === 'success' ? 'alert-success' : 'alert-info';
+        const icono = tipo === 'error' ? 'fa-exclamation-triangle' : tipo === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+        
+        const notificacion = $(`
+            <div class="alert ${claseColor} alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999; max-width: 400px;">
+                <i class="fas ${icono}"></i> ${mensaje}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+            </div>
+        `);
+        
+        $('body').append(notificacion);
+        
+        // Auto-remove after 5 seconds
         setTimeout(() => {
-            cargarComentarios();
-        }, 1000);
-    </script>
+            notificacion.alert('close');
+        }, 5000);
+    }
+
+    function getTipoClase(tipo) {
+        const tipos = {
+            'pdf': 'content-type-pdf',
+            'video_archivo': 'content-type-video',
+            'video_youtube': 'content-type-video',
+            'audio': 'content-type-audio',
+            'imagen': 'content-type-image'
+        };
+        return tipos[tipo] || '';
+    }
+
+    function getTipoTexto(tipo) {
+        const tipos = {
+            'pdf': 'PDF',
+            'video_archivo': 'Video',
+            'video_youtube': 'Video YouTube',
+            'audio': 'Audio',
+            'imagen': 'Imagen'
+        };
+        return tipos[tipo] || 'Archivo';
+    }
+
+    function generarVisualizadorContenido(contenido) {
+        const rutaArchivo = `uploads/${contenido.arc_contenido}`;
+        
+        switch(contenido.tip_contenido) {
+            case 'pdf':
+                return `
+                    <div class="pdf-viewer mb-3">
+                        <canvas id="pdf-canvas-${contenido.id_contenido}" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
+                        <div class="pdf-controls mt-2">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="previousPage(${contenido.id_contenido})">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <span class="mx-3" id="page-info-${contenido.id_contenido}">Página 1 de 1</span>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="nextPage(${contenido.id_contenido})">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+            case 'video_archivo':
+                return `
+                    <div class="video-player mb-3">
+                        <video controls class="w-100" style="max-height: 400px;">
+                            <source src="${rutaArchivo}" type="video/mp4">
+                            Tu navegador no soporta la reproducción de video.
+                        </video>
+                    </div>
+                `;
+                
+            case 'video_youtube':
+                const videoId = extraerIdYoutube(contenido.url_contenido);
+                return `
+                    <div class="video-player mb-3">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `;
+                
+            case 'audio':
+                return `
+                    <div class="audio-player mb-3">
+                        <audio controls class="w-100">
+                            <source src="${rutaArchivo}" type="audio/mpeg">
+                            Tu navegador no soporta la reproducción de audio.
+                        </audio>
+                    </div>
+                `;
+                
+            case 'imagen':
+                return `
+                    <div class="mb-3 text-center">
+                        <img src="${rutaArchivo}" class="image-viewer img-fluid" alt="${contenido.tit_contenido}" 
+                             style="max-height: 400px; cursor: pointer;" 
+                             onclick="window.open('${rutaArchivo}', '_blank')">
+                    </div>
+                `;
+                
+            default:
+                return `
+                    <div class="alert alert-info">
+                        <i class="fas fa-download"></i> 
+                        <a href="${rutaArchivo}" target="_blank" class="alert-link">
+                            Descargar archivo: ${contenido.arc_contenido}
+                        </a>
+                    </div>
+                `;
+        }
+    }
+
+    function extraerIdYoutube(url) {
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : '';
+    }
+
+    function formatearFecha(fecha) {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    function formatearFechaHora(fecha) {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // =====================================
+    // FUNCIONES PARA PDF.js
+    // =====================================
+
+    // Variables globales para PDF.js
+    let pdfDocuments = {};
+    let currentPages = {};
+
+    function renderPDF(url, contentId) {
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            pdfDocuments[contentId] = pdf;
+            currentPages[contentId] = 1;
+            
+            renderPage(contentId, 1);
+            updatePageInfo(contentId);
+        }).catch(function(error) {
+            console.error('Error loading PDF:', error);
+            $(`#pdf-canvas-${contentId}`).parent().html(`
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Error al cargar el PDF: ${url}
+                </div>
+            `);
+        });
+    }
+
+    function renderPage(contentId, pageNum) {
+        const pdf = pdfDocuments[contentId];
+        if (!pdf) return;
+        
+        pdf.getPage(pageNum).then(function(page) {
+            const canvas = document.getElementById(`pdf-canvas-${contentId}`);
+            const context = canvas.getContext('2d');
+            
+            const viewport = page.getViewport({scale: 1.2});
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+        });
+    }
+
+    function updatePageInfo(contentId) {
+        const pdf = pdfDocuments[contentId];
+        const currentPage = currentPages[contentId];
+        
+        if (pdf) {
+            $(`#page-info-${contentId}`).text(`Página ${currentPage} de ${pdf.numPages}`);
+        }
+    }
+
+    function previousPage(contentId) {
+        if (currentPages[contentId] > 1) {
+            currentPages[contentId]--;
+            renderPage(contentId, currentPages[contentId]);
+            updatePageInfo(contentId);
+        }
+    }
+
+    function nextPage(contentId) {
+        const pdf = pdfDocuments[contentId];
+        if (pdf && currentPages[contentId] < pdf.numPages) {
+            currentPages[contentId]++;
+            renderPage(contentId, currentPages[contentId]);
+            updatePageInfo(contentId);
+        }
+    }
+</script>
+
 </body>
 </html>
