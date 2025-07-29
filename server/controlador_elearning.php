@@ -208,59 +208,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		break;
 
-		case 'crear_curso':
-			$nom_curso = isset($_POST['nombre']) ? escape($_POST['nombre'], $connection) : '';
-			$des_curso = isset($_POST['descripcion']) ? escape($_POST['descripcion'], $connection) : '';
-			$id_eje_creador = isset($_POST['id_ejecutivo']) ? intval($_POST['id_ejecutivo']) : 1;
-			
-			if (!$nom_curso) {
-				echo respuestaError('Nombre del curso requerido');
-				break;
-			}
-			
-			$query = "INSERT INTO curso (nom_curso, des_curso, id_eje_creador)
-					  VALUES ('$nom_curso', '$des_curso', $id_eje_creador)";
-			
-			file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Query crear curso: ' . $query . "\n", FILE_APPEND);
-			
-			if (mysqli_query($connection, $query)) {
-				$nuevo_id = mysqli_insert_id($connection);
-				file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Curso creado exitosamente ID: ' . $nuevo_id . "\n", FILE_APPEND);
-				echo respuestaExito(['id' => $nuevo_id], 'Curso creado correctamente');
-			} else {
-				$error = mysqli_error($connection);
-				file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Error MySQL crear curso: ' . $error . "\n", FILE_APPEND);
-				echo respuestaError('Error al crear curso: ' . $error);
-			}
-		break;
-
-		case 'crear_clase':
-			$id_curso = isset($_POST['id_curso']) ? intval($_POST['id_curso']) : 0;
-			$tit_clase = isset($_POST['titulo']) ? escape($_POST['titulo'], $connection) : '';
-			$des_clase = isset($_POST['descripcion']) ? escape($_POST['descripcion'], $connection) : '';
-			$ord_clase = isset($_POST['orden']) ? intval($_POST['orden']) : 1;
-			$id_eje_creador = isset($_POST['id_ejecutivo']) ? intval($_POST['id_ejecutivo']) : 1;
-			
-			if (!$id_curso || !$tit_clase) {
-				echo respuestaError('Curso y título de clase requeridos');
-				break;
-			}
-			
-			$query = "INSERT INTO clase (id_curso, tit_clase, des_clase, ord_clase, id_eje_creador)
-					  VALUES ($id_curso, '$tit_clase', '$des_clase', $ord_clase, $id_eje_creador)";
-			
-			file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Query crear clase: ' . $query . "\n", FILE_APPEND);
-			
-			if (mysqli_query($connection, $query)) {
-				$nuevo_id = mysqli_insert_id($connection);
-				file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Clase creada exitosamente ID: ' . $nuevo_id . "\n", FILE_APPEND);
-				echo respuestaExito(['id' => $nuevo_id], 'Clase creada correctamente');
-			} else {
-				$error = mysqli_error($connection);
-				file_put_contents('debug_elearning.log', '[' . date('Y-m-d H:i:s') . '] Error MySQL crear clase: ' . $error . "\n", FILE_APPEND);
-				echo respuestaError('Error al crear clase: ' . $error);
-			}
-		break;
+		// =====================================
+		// CASOS PRINCIPALES PARA VISUALIZACIÓN
+		// =====================================
 
 		case 'subir_contenido':
 			$id_clase = isset($_POST['id_clase']) ? intval($_POST['id_clase']) : 0;
@@ -508,7 +458,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						nom_curso = '$nom_curso',
 						des_curso = '$des_curso',
 						id_eje_creador = $id_eje_creador,
-						fec_modificacion_curso = NOW()
+						fec_actualizacion_curso = NOW()
 					  WHERE id_curso = $id_curso AND eli_curso = 1";
 			
 			if(mysqli_query($connection, $query)) {
@@ -628,7 +578,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						des_clase = '$des_clase',
 						ord_clase = $ord_clase,
 						id_eje_creador = $id_eje_creador,
-						fec_modificacion_clase = NOW()
+						fec_actualizacion_clase = NOW()
 					  WHERE id_clase = $id_clase AND eli_clase = 1";
 			
 			if(mysqli_query($connection, $query)) {
@@ -817,7 +767,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						des_contenido = '$des_contenido',
 						ord_contenido = $ord_contenido,
 						id_eje_creador = $id_eje_creador,
-						fec_modificacion_contenido = NOW()
+						fec_actualizacion_contenido = NOW()
 					  WHERE id_contenido = $id_contenido AND eli_contenido = 1";
 			
 			if(mysqli_query($connection, $query)) {

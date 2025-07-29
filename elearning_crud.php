@@ -147,6 +147,51 @@
             background: #e3f2fd;
             transform: scale(1.02);
         }
+        
+        /* Estilos para indicadores de edición */
+        .edit-mode-indicator {
+            border-left: 4px solid #ffc107;
+            background: #fff3cd;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .card-header.bg-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%) !important;
+            color: #212529 !important;
+        }
+        
+        .alert-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mejora visual para botones de edición */
+        .btn-warning:focus,
+        .btn-warning.focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+        }
+        
+        /* Indicador de formulario activo */
+        .form-active {
+            border: 2px solid #007bff;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.1);
+        }
+        
+        .form-editing {
+            border: 2px solid #ffc107;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -554,36 +599,73 @@
     // =====================================
     
     function llamarServidor(action, data = {}, callback = null, errorCallback = null) {
-        data.action = action;
-        
-        $.ajax({
-            url: 'server/controlador_elearning.php',
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                if (response.success) {
-                    if (callback) callback(response.data, response.message);
-                } else {
-                    console.error('Error del servidor:', response.message);
-                    if (errorCallback) {
-                        errorCallback(response.message);
+        // Verificar si data es FormData
+        if (data instanceof FormData) {
+            data.append('action', action);
+            
+            $.ajax({
+                url: 'server/controlador_elearning.php',
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('Respuesta del servidor:', response);
+                    if (response.success) {
+                        if (callback) callback(response.data, response.message);
                     } else {
-                        mostrarNotificacion('Error: ' + response.message, 'error');
+                        console.error('Error del servidor:', response.message);
+                        if (errorCallback) {
+                            errorCallback(response.message);
+                        } else {
+                            mostrarNotificacion('Error: ' + response.message, 'error');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error en la comunicación:', error, xhr.responseText);
+                    const mensaje = 'Error de comunicación con el servidor';
+                    if (errorCallback) {
+                        errorCallback(mensaje);
+                    } else {
+                        mostrarNotificacion(mensaje, 'error');
                     }
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error en la comunicación:', error);
-                const mensaje = 'Error de comunicación con el servidor';
-                if (errorCallback) {
-                    errorCallback(mensaje);
-                } else {
-                    mostrarNotificacion(mensaje, 'error');
+            });
+        } else {
+            // Para objetos normales
+            data.action = action;
+            
+            $.ajax({
+                url: 'server/controlador_elearning.php',
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Respuesta del servidor:', response);
+                    if (response.success) {
+                        if (callback) callback(response.data, response.message);
+                    } else {
+                        console.error('Error del servidor:', response.message);
+                        if (errorCallback) {
+                            errorCallback(response.message);
+                        } else {
+                            mostrarNotificacion('Error: ' + response.message, 'error');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error en la comunicación:', error, xhr.responseText);
+                    const mensaje = 'Error de comunicación con el servidor';
+                    if (errorCallback) {
+                        errorCallback(mensaje);
+                    } else {
+                        mostrarNotificacion(mensaje, 'error');
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     // =====================================
@@ -886,17 +968,22 @@
         e.preventDefault();
         
         const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
-        const esEdicion = !!data.id_curso;
+        const esEdicion = !!formData.get('id_curso');
         
         // Agregar ejecutivo actual si no se especifica
-        if (!data.id_eje_creador) {
-            data.id_eje_creador = ejecutivoActual;
+        if (!formData.get('id_eje_creador')) {
+            formData.set('id_eje_creador', ejecutivoActual);
         }
         
         const action = esEdicion ? 'actualizar_curso' : 'crear_curso';
         
-        llamarServidor(action, data, function(response, mensaje) {
+        // Debug: mostrar datos del formulario
+        console.log('Datos del formulario curso:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        
+        llamarServidor(action, formData, function(response, mensaje) {
             mostrarNotificacion(mensaje, 'success');
             limpiarFormularioCurso();
             cargarCursos();
@@ -911,8 +998,23 @@
             $('#curso-descripcion').val(curso.des_curso);
             $('#curso-creador').val(curso.id_eje_creador);
             
-            $('#curso-form-title').text('Editar Curso');
+            // Cambiar UI para modo edición
+            $('#curso-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Curso');
             $('#curso-btn-text').text('Actualizar Curso');
+            $('#curso-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#curso-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
+            
+            // Mostrar indicador de modo edición
+            if (!$('#curso-edit-indicator').length) {
+                $('#curso-form').prepend(`
+                    <div id="curso-edit-indicator" class="alert alert-warning alert-sm mb-3">
+                        <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando curso existente
+                        <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioCurso()">
+                            <i class="fas fa-times"></i> Cancelar edición
+                        </button>
+                    </div>
+                `);
+            }
             
             // Scroll al formulario
             $('html, body').animate({
@@ -936,10 +1038,17 @@
     }
 
     function limpiarFormularioCurso() {
-        $('#curso-form')[0].reset();
+        $('#curso-form form')[0].reset();
         $('#curso-id').val('');
-        $('#curso-form-title').text('Agregar Nuevo Curso');
+        
+        // Restaurar UI para modo creación
+        $('#curso-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nuevo Curso');
         $('#curso-btn-text').text('Guardar Curso');
+        $('#curso-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#curso-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
+        
+        // Remover indicador de edición
+        $('#curso-edit-indicator').remove();
     }
 
     // =====================================
@@ -1028,17 +1137,22 @@
         e.preventDefault();
         
         const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
-        const esEdicion = !!data.id_clase;
+        const esEdicion = !!formData.get('id_clase');
         
         // Agregar ejecutivo actual si no se especifica
-        if (!data.id_eje_creador) {
-            data.id_eje_creador = ejecutivoActual;
+        if (!formData.get('id_eje_creador')) {
+            formData.set('id_eje_creador', ejecutivoActual);
         }
         
         const action = esEdicion ? 'actualizar_clase' : 'crear_clase';
         
-        llamarServidor(action, data, function(response, mensaje) {
+        // Debug: mostrar datos del formulario
+        console.log('Datos del formulario clase:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        
+        llamarServidor(action, formData, function(response, mensaje) {
             mostrarNotificacion(mensaje, 'success');
             limpiarFormularioClase();
             cargarClases();
@@ -1055,8 +1169,23 @@
             $('#clase-orden').val(clase.ord_clase);
             $('#clase-creador').val(clase.id_eje_creador);
             
-            $('#clase-form-title').text('Editar Clase');
+            // Cambiar UI para modo edición
+            $('#clase-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Clase');
             $('#clase-btn-text').text('Actualizar Clase');
+            $('#clase-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#clase-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
+            
+            // Mostrar indicador de modo edición
+            if (!$('#clase-edit-indicator').length) {
+                $('#clase-form').prepend(`
+                    <div id="clase-edit-indicator" class="alert alert-warning alert-sm mb-3">
+                        <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando clase existente
+                        <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioClase()">
+                            <i class="fas fa-times"></i> Cancelar edición
+                        </button>
+                    </div>
+                `);
+            }
             
             // Activar tab de clases y scroll al formulario
             $('#clases-tab').tab('show');
@@ -1083,10 +1212,17 @@
     }
 
     function limpiarFormularioClase() {
-        $('#clase-form')[0].reset();
+        $('#clase-form form')[0].reset();
         $('#clase-id').val('');
-        $('#clase-form-title').text('Agregar Nueva Clase');
+        
+        // Restaurar UI para modo creación
+        $('#clase-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nueva Clase');
         $('#clase-btn-text').text('Guardar Clase');
+        $('#clase-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#clase-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
+        
+        // Remover indicador de edición
+        $('#clase-edit-indicator').remove();
     }
 
     // =====================================
@@ -1244,8 +1380,23 @@
                 `).show();
             }
             
-            $('#contenido-form-title').text('Editar Contenido');
+            // Cambiar UI para modo edición
+            $('#contenido-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Contenido');
             $('#contenido-btn-text').text('Actualizar Contenido');
+            $('#contenido-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#contenido-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
+            
+            // Mostrar indicador de modo edición
+            if (!$('#contenido-edit-indicator').length) {
+                $('#contenido-form').prepend(`
+                    <div id="contenido-edit-indicator" class="alert alert-warning alert-sm mb-3">
+                        <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando contenido existente
+                        <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioContenido()">
+                            <i class="fas fa-times"></i> Cancelar edición
+                        </button>
+                    </div>
+                `);
+            }
             
             // Activar tab de contenidos y scroll al formulario
             $('#contenidos-tab').tab('show');
@@ -1272,10 +1423,18 @@
     }
 
     function limpiarFormularioContenido() {
-        $('#contenido-form')[0].reset();
+        $('#contenido-form form')[0].reset();
         $('#contenido-id').val('');
-        $('#contenido-form-title').text('Agregar Nuevo Contenido');
+        
+        // Restaurar UI para modo creación
+        $('#contenido-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nuevo Contenido');
         $('#contenido-btn-text').text('Guardar Contenido');
+        $('#contenido-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#contenido-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
+        
+        // Remover indicador de edición
+        $('#contenido-edit-indicator').remove();
+        
         $('#archivo-preview').hide();
         $('#youtube-preview').hide();
         toggleContenidoFields();
