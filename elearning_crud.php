@@ -155,6 +155,12 @@
             animation: slideIn 0.3s ease-out;
         }
         
+        .form-section.bg-warning {
+            background-color: #fff3cd !important;
+            border: 2px solid #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+        }
+        
         .card-header.bg-warning {
             background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%) !important;
             color: #212529 !important;
@@ -191,6 +197,11 @@
         .form-editing {
             border: 2px solid #ffc107;
             box-shadow: 0 0 20px rgba(255, 193, 7, 0.1);
+        }
+        
+        /* Animación para el cambio de modo */
+        .form-section {
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -1001,12 +1012,12 @@
             // Cambiar UI para modo edición
             $('#curso-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Curso');
             $('#curso-btn-text').text('Actualizar Curso');
-            $('#curso-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#curso-form').closest('.form-section').removeClass('bg-light').addClass('bg-warning').css('background-color', '#fff3cd');
             $('#curso-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
             
             // Mostrar indicador de modo edición
             if (!$('#curso-edit-indicator').length) {
-                $('#curso-form').prepend(`
+                $('#curso-form').closest('.form-section').prepend(`
                     <div id="curso-edit-indicator" class="alert alert-warning alert-sm mb-3">
                         <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando curso existente
                         <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioCurso()">
@@ -1038,13 +1049,13 @@
     }
 
     function limpiarFormularioCurso() {
-        $('#curso-form form')[0].reset();
+        $('#curso-form')[0].reset();
         $('#curso-id').val('');
         
         // Restaurar UI para modo creación
         $('#curso-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nuevo Curso');
         $('#curso-btn-text').text('Guardar Curso');
-        $('#curso-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#curso-form').closest('.form-section').removeClass('bg-warning').addClass('bg-light').css('background-color', '#f8f9fa');
         $('#curso-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
         
         // Remover indicador de edición
@@ -1172,12 +1183,12 @@
             // Cambiar UI para modo edición
             $('#clase-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Clase');
             $('#clase-btn-text').text('Actualizar Clase');
-            $('#clase-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#clase-form').closest('.form-section').removeClass('bg-light').addClass('bg-warning').css('background-color', '#fff3cd');
             $('#clase-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
             
             // Mostrar indicador de modo edición
             if (!$('#clase-edit-indicator').length) {
-                $('#clase-form').prepend(`
+                $('#clase-form').closest('.form-section').prepend(`
                     <div id="clase-edit-indicator" class="alert alert-warning alert-sm mb-3">
                         <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando clase existente
                         <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioClase()">
@@ -1212,13 +1223,13 @@
     }
 
     function limpiarFormularioClase() {
-        $('#clase-form form')[0].reset();
+        $('#clase-form')[0].reset();
         $('#clase-id').val('');
         
         // Restaurar UI para modo creación
         $('#clase-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nueva Clase');
         $('#clase-btn-text').text('Guardar Clase');
-        $('#clase-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#clase-form').closest('.form-section').removeClass('bg-warning').addClass('bg-light').css('background-color', '#f8f9fa');
         $('#clase-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
         
         // Remover indicador de edición
@@ -1383,12 +1394,12 @@
             // Cambiar UI para modo edición
             $('#contenido-form-title').html('<i class="fas fa-edit text-warning"></i> Editar Contenido');
             $('#contenido-btn-text').text('Actualizar Contenido');
-            $('#contenido-form .card-header').removeClass('bg-primary').addClass('bg-warning');
+            $('#contenido-form').closest('.form-section').removeClass('bg-light').addClass('bg-warning').css('background-color', '#fff3cd');
             $('#contenido-form button[type="submit"]').removeClass('btn-primary').addClass('btn-warning');
             
             // Mostrar indicador de modo edición
             if (!$('#contenido-edit-indicator').length) {
-                $('#contenido-form').prepend(`
+                $('#contenido-form').closest('.form-section').prepend(`
                     <div id="contenido-edit-indicator" class="alert alert-warning alert-sm mb-3">
                         <i class="fas fa-edit"></i> <strong>Modo Edición:</strong> Modificando contenido existente
                         <button type="button" class="btn btn-sm btn-outline-warning ml-2" onclick="limpiarFormularioContenido()">
@@ -1423,13 +1434,13 @@
     }
 
     function limpiarFormularioContenido() {
-        $('#contenido-form form')[0].reset();
+        $('#contenido-form')[0].reset();
         $('#contenido-id').val('');
         
         // Restaurar UI para modo creación
         $('#contenido-form-title').html('<i class="fas fa-plus-circle text-primary"></i> Agregar Nuevo Contenido');
         $('#contenido-btn-text').text('Guardar Contenido');
-        $('#contenido-form .card-header').removeClass('bg-warning').addClass('bg-primary');
+        $('#contenido-form').closest('.form-section').removeClass('bg-warning').addClass('bg-light').css('background-color', '#f8f9fa');
         $('#contenido-form button[type="submit"]').removeClass('btn-warning').addClass('btn-primary');
         
         // Remover indicador de edición

@@ -577,8 +577,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						tit_clase = '$tit_clase',
 						des_clase = '$des_clase',
 						ord_clase = $ord_clase,
-						id_eje_creador = $id_eje_creador,
-						fec_actualizacion_clase = NOW()
+						id_eje_creador = $id_eje_creador
 					  WHERE id_clase = $id_clase AND eli_clase = 1";
 			
 			if(mysqli_query($connection, $query)) {
