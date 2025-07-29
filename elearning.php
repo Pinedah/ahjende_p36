@@ -409,6 +409,49 @@
             border-left: 2px solid #e9ecef;
         }
         
+        /* Nuevos estilos para comentarios recursivos */
+        .replies-section {
+            margin-top: 10px;
+        }
+        
+        .comment-item[style*="margin-left"] {
+            position: relative;
+            border-left: 2px solid #e9ecef;
+            padding-left: 15px;
+            margin-top: 10px;
+        }
+        
+        .comment-item[style*="margin-left"]:before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            height: 2px;
+            width: 15px;
+            background: #e9ecef;
+        }
+        
+        /* Diferentes colores de borde para diferentes niveles */
+        .comment-item[style*="margin-left: 30px"] {
+            border-left-color: #007bff;
+        }
+        
+        .comment-item[style*="margin-left: 60px"] {
+            border-left-color: #28a745;
+        }
+        
+        .comment-item[style*="margin-left: 90px"] {
+            border-left-color: #ffc107;
+        }
+        
+        .comment-item[style*="margin-left: 120px"] {
+            border-left-color: #dc3545;
+        }
+        
+        .comment-item[style*="margin-left: 150px"] {
+            border-left-color: #6f42c1;
+        }
+        
         /* Responsive */
         @media (max-width: 1200px) {
             .courses-grid {
@@ -865,18 +908,24 @@
         container.html(html);
     }
 
-    function generarHtmlComentario(comentario) {
+    function generarHtmlComentario(comentario, nivel = 0) {
+        const margenIzquierdo = nivel * 30; // 30px por nivel de anidación
+        const maxNivel = 5; // Máximo 5 niveles de anidación para no sobrecargar visualmente
+        const mostrarMargen = nivel > 0 ? `style="margin-left: ${margenIzquierdo}px;"` : '';
+        
         let html = `
-            <div class="comment-item" data-comentario-id="${comentario.id_comentario}">
+            <div class="comment-item" data-comentario-id="${comentario.id_comentario}" ${mostrarMargen}>
                 <div class="comment-header">
                     <span class="comment-author">${comentario.autor_comentario}</span>
                     <span class="comment-date">${formatearFechaHora(comentario.fec_comentario)}</span>
                 </div>
                 <div class="comment-content">${comentario.tex_comentario}</div>
                 <div class="comment-actions">
-                    <button class="btn btn-link btn-sm p-0" onclick="responderComentario(${comentario.id_comentario})">
-                        <i class="fas fa-reply"></i> Responder
-                    </button>
+                    ${nivel < maxNivel ? `
+                        <button class="btn btn-link btn-sm p-0" onclick="responderComentario(${comentario.id_comentario})">
+                            <i class="fas fa-reply"></i> Responder
+                        </button>
+                    ` : ''}
                 </div>
                 
                 <!-- Formulario de respuesta (oculto inicialmente) -->
@@ -897,19 +946,11 @@
                 </div>
         `;
 
-        // Agregar respuestas si las hay
+        // Agregar respuestas recursivamente
         if (comentario.respuestas && comentario.respuestas.length > 0) {
-            html += '<div class="reply-section">';
+            html += '<div class="replies-section mt-2">';
             comentario.respuestas.forEach(respuesta => {
-                html += `
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <span class="comment-author">${respuesta.autor_comentario}</span>
-                            <span class="comment-date">${formatearFechaHora(respuesta.fec_comentario)}</span>
-                        </div>
-                        <div class="comment-content">${respuesta.tex_comentario}</div>
-                    </div>
-                `;
+                html += generarHtmlComentario(respuesta, nivel + 1);
             });
             html += '</div>';
         }

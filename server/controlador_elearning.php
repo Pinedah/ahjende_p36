@@ -356,27 +356,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // =====================================
 
 function organizarComentariosJerarquicos($comentarios) {
-	$comentarios_padre = [];
-	$respuestas = [];
-	
-	// Separar comentarios padre de respuestas
+	// Crear un array indexado por id para acceso rápido
+	$comentarios_indexados = [];
 	foreach ($comentarios as $comentario) {
+		$comentario['respuestas'] = [];
+		$comentarios_indexados[$comentario['id_comentario']] = $comentario;
+	}
+	
+	// Organizar jerárquicamente
+	$comentarios_raiz = [];
+	
+	foreach ($comentarios_indexados as $id => $comentario) {
 		if ($comentario['id_comentario_padre'] === null) {
-			$comentarios_padre[] = $comentario;
+			// Es un comentario raíz
+			$comentarios_raiz[] = &$comentarios_indexados[$id];
 		} else {
-			if (!isset($respuestas[$comentario['id_comentario_padre']])) {
-				$respuestas[$comentario['id_comentario_padre']] = [];
+			// Es una respuesta, agregarla al comentario padre
+			$id_padre = $comentario['id_comentario_padre'];
+			if (isset($comentarios_indexados[$id_padre])) {
+				$comentarios_indexados[$id_padre]['respuestas'][] = &$comentarios_indexados[$id];
 			}
-			$respuestas[$comentario['id_comentario_padre']][] = $comentario;
 		}
 	}
 	
-	// Agregar respuestas a comentarios padre
-	foreach ($comentarios_padre as &$comentario) {
-		$comentario['respuestas'] = isset($respuestas[$comentario['id_comentario']]) ? 
-									$respuestas[$comentario['id_comentario']] : [];
-	}
-	
-	return $comentarios_padre;
+	return $comentarios_raiz;
 }
 ?>
