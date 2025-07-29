@@ -11,9 +11,6 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- PDF.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
@@ -57,28 +54,103 @@
             padding: 15px 20px;
         }
         
+        /* Grid de cursos */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
         .course-item {
             cursor: pointer;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             border: 1px solid #dee2e6;
             background: white;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .course-item:hover {
             background: #f8f9fa;
             border-color: #007bff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.15);
         }
         
         .course-item.active {
             background: #007bff;
             color: white;
             border-color: #007bff;
+        }
+        
+        .course-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #007bff;
+            line-height: 1.3;
+        }
+        
+        .course-item.active .course-title {
+            color: white;
+        }
+        
+        .course-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            line-height: 1.4;
+        }
+        
+        .course-item.active .course-description {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        
+        .course-item.active .course-meta {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .course-date {
+            font-size: 0.75rem;
+            color: #8c9197;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .course-item.active .course-date {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .course-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .course-item:hover .course-arrow {
+            transform: translateX(5px);
         }
         
         /* Stepper para clases */
@@ -338,7 +410,19 @@
         }
         
         /* Responsive */
+        @media (max-width: 1200px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+        }
+        
         @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
             .stepper {
                 flex-direction: column;
                 align-items: stretch;
@@ -355,6 +439,20 @@
             .class-meta {
                 flex-direction: column;
                 gap: 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .courses-nav {
+                padding: 10px 15px;
+            }
+            
+            .course-item {
+                padding: 15px;
+            }
+            
+            .course-title {
+                font-size: 1rem;
             }
         }
         
@@ -393,7 +491,6 @@
         <div class="main-container">
             <div class="header-section">
                 <h3><i class="fas fa-graduation-cap mr-2"></i>Sistema de E-Learning</h3>
-                <small>Plataforma de Aprendizaje Digital SICAM</small>
             </div>
             
             <!-- Navegación de cursos -->
@@ -518,27 +615,28 @@
             return;
         }
         
-        let html = '';
+        let html = '<div class="courses-grid">';
         cursos.forEach(curso => {
             html += `
                 <div class="course-item" onclick="seleccionarCurso(${curso.id_curso}, '${curso.nom_curso}')">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-2 text-primary">${curso.nom_curso}</h6>
-                            <p class="text-muted mb-2 small">${curso.des_curso}</p>
-                            <div class="d-flex justify-content-between text-muted small">
-                                <span><i class="fas fa-book"></i> ${curso.total_clases} clases</span>
-                                <span><i class="fas fa-user"></i> ${curso.creador_curso}</span>
-                            </div>
-                            <small class="text-muted">
+                    <div class="course-content">
+                        <h6 class="course-title">${curso.nom_curso}</h6>
+                        <p class="course-description">${curso.des_curso}</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-book"></i> ${curso.total_clases} clases</span>
+                            <span><i class="fas fa-user"></i> ${curso.creador_curso}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="course-date">
                                 <i class="fas fa-calendar"></i> ${formatearFecha(curso.fec_creacion_curso)}
                             </small>
+                            <i class="fas fa-chevron-right course-arrow"></i>
                         </div>
-                        <i class="fas fa-chevron-right text-muted"></i>
                     </div>
                 </div>
             `;
         });
+        html += '</div>';
         
         container.html(html);
     }
@@ -652,12 +750,6 @@
         // Cargar comentarios para cada contenido
         contenidos.forEach(contenido => {
             cargarComentarios(contenido.id_contenido);
-            // Si es PDF, renderizar después de insertar el HTML
-            if (contenido.tip_contenido === 'pdf' && contenido.arc_contenido) {
-                setTimeout(() => {
-                    renderPDF(`uploads/${contenido.arc_contenido}`, contenido.id_contenido);
-                }, 200);
-            }
         });
     }
 
@@ -953,16 +1045,32 @@
         switch(contenido.tip_contenido) {
             case 'pdf':
                 return `
-                    <div class="pdf-viewer mb-3">
-                        <canvas id="pdf-canvas-${contenido.id_contenido}" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
-                        <div class="pdf-controls mt-2">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="previousPage(${contenido.id_contenido})">
-                                <i class="fas fa-chevron-left"></i> Anterior
-                            </button>
-                            <span class="mx-3" id="page-info-${contenido.id_contenido}">Página 1 de 1</span>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="nextPage(${contenido.id_contenido})">
-                                Siguiente <i class="fas fa-chevron-right"></i>
-                            </button>
+                    <div class="pdf-viewer-container mb-3">
+                        <div class="pdf-toolbar d-flex justify-content-between align-items-center mb-2 p-2 bg-light border rounded">
+                            <div class="pdf-info">
+                                <i class="fas fa-file-pdf text-danger"></i>
+                                <span class="ml-2 font-weight-bold">${contenido.tit_contenido}</span>
+                            </div>
+                            <div class="pdf-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="abrirPDFVentana('${rutaArchivo}')">
+                                    <i class="fas fa-external-link-alt"></i> Abrir en nueva ventana
+                                </button>
+                                <a href="${rutaArchivo}" download class="btn btn-sm btn-outline-success ml-2">
+                                    <i class="fas fa-download"></i> Descargar
+                                </a>
+                            </div>
+                        </div>
+                        <div class="pdf-iframe-container" style="position: relative; width: 100%; height: 900px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+                            <iframe 
+                                src="${rutaArchivo}#toolbar=1&navpanes=1&scrollbar=1&page=1&view=FitH" 
+                                width="100%" 
+                                height="100%" 
+                                style="border: none;"
+                                title="Visor PDF: ${contenido.tit_contenido}">
+                                <p>Tu navegador no soporta la visualización de PDFs. 
+                                   <a href="${rutaArchivo}" target="_blank">Haz clic aquí para descargar el archivo</a>
+                                </p>
+                            </iframe>
                         </div>
                     </div>
                 `;
@@ -1045,74 +1153,12 @@
     }
 
     // =====================================
-    // FUNCIONES PARA PDF.js
+    // FUNCIONES PARA PDF
     // =====================================
 
-    // Variables globales para PDF.js
-    let pdfDocuments = {};
-    let currentPages = {};
-
-    function renderPDF(url, contentId) {
-        pdfjsLib.getDocument(url).promise.then(function(pdf) {
-            pdfDocuments[contentId] = pdf;
-            currentPages[contentId] = 1;
-            
-            renderPage(contentId, 1);
-            updatePageInfo(contentId);
-        }).catch(function(error) {
-            console.error('Error loading PDF:', error);
-            $(`#pdf-canvas-${contentId}`).parent().html(`
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle"></i> 
-                    Error al cargar el PDF: ${url}
-                </div>
-            `);
-        });
-    }
-
-    function renderPage(contentId, pageNum) {
-        const pdf = pdfDocuments[contentId];
-        if (!pdf) return;
-        
-        pdf.getPage(pageNum).then(function(page) {
-            const canvas = document.getElementById(`pdf-canvas-${contentId}`);
-            const context = canvas.getContext('2d');
-            
-            const viewport = page.getViewport({scale: 1.2});
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            
-            page.render({
-                canvasContext: context,
-                viewport: viewport
-            });
-        });
-    }
-
-    function updatePageInfo(contentId) {
-        const pdf = pdfDocuments[contentId];
-        const currentPage = currentPages[contentId];
-        
-        if (pdf) {
-            $(`#page-info-${contentId}`).text(`Página ${currentPage} de ${pdf.numPages}`);
-        }
-    }
-
-    function previousPage(contentId) {
-        if (currentPages[contentId] > 1) {
-            currentPages[contentId]--;
-            renderPage(contentId, currentPages[contentId]);
-            updatePageInfo(contentId);
-        }
-    }
-
-    function nextPage(contentId) {
-        const pdf = pdfDocuments[contentId];
-        if (pdf && currentPages[contentId] < pdf.numPages) {
-            currentPages[contentId]++;
-            renderPage(contentId, currentPages[contentId]);
-            updatePageInfo(contentId);
-        }
+    // Función para abrir PDF en nueva ventana
+    function abrirPDFVentana(url) {
+        window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
     }
 </script>
 
